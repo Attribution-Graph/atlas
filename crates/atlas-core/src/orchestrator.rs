@@ -7,6 +7,7 @@ use tracing::{debug, info};
 use graph::builder::{GraphBuilder, TxRecord};
 use graph::rank::{compute_pagerank, RankConfig, RankingResult};
 use ingestion::horizon::{HorizonClient, HorizonConfig};
+use ingestion::ledger_range::LedgerRange;
 use ingestion::models::Transaction;
 
 /// Configuration for a single ingestion run.
@@ -45,14 +46,23 @@ pub async fn run(config: IngestConfig) -> Result<IngestResult> {
     let horizon_config = HorizonConfig::with_url(&config.horizon_url);
     let client = HorizonClient::new(horizon_config)?;
 
-    // Step 1: Fetch transactions
+    // Step 1: Validate and build the ledger range
+    let range = LedgerRange::new(config.start_ledger, config.end_ledger)
+        .map_err(|e| anyhow::anyhow!("Invalid ledger range: {}", e))?;
+
     info!(
-        start = config.start_ledger,
-        end = config.end_ledger,
+        range = %range,
+        size = range.size(),
         "Ingesting ledger range"
     );
+
+    // Warn if range is very large
+    if let Err(e) = range.check_size() {
+        tracing::warn!("{} — consider using --start-ledger/--end-ledger to narrow the window", e);
+    }
+
     let transactions = client
-        .fetch_transactions_in_range(config.start_ledger, config.end_ledger)
+        .fetch_transactions_in_range(range.start(), range.end())
         .await?;
 
     info!(count = transactions.len(), "Transactions ingested");
