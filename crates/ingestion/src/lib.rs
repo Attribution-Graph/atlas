@@ -24,7 +24,9 @@
 //! ```
 
 pub mod horizon;
+pub mod ledger_range;
 pub mod models;
 
 pub use horizon::{extract_participants, HorizonClient, HorizonConfig};
+pub use ledger_range::{LedgerRange, LedgerRangeError, GENESIS_LEDGER, MAX_WINDOW_SIZE};
 pub use models::{AccountId, LedgerSequence, Operation, OperationType, Participant, Transaction};
