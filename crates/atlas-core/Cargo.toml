@@ -1,0 +1,26 @@
+[package]
+name = "atlas-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Atlas CLI: Stellar ledger ingestion and contribution graph analytics"
+
+[[bin]]
+name = "atlas"
+path = "src/main.rs"
+
+[dependencies]
+ingestion = { path = "../ingestion" }
+graph = { path = "../graph" }
+tokio = { workspace = true }
+clap = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+anyhow = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+sqlx = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+thiserror = { workspace = true }
