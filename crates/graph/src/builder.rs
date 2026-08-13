@@ -149,10 +149,7 @@ impl ContributionGraph {
 
     /// Return all incoming edges to the given node.
     pub fn incoming_edges(&self, account_id: &str) -> Vec<&Edge> {
-        self.edges
-            .values()
-            .filter(|e| e.to == account_id)
-            .collect()
+        self.edges.values().filter(|e| e.to == account_id).collect()
     }
 
     /// Add or retrieve a node, returning a mutable reference.
@@ -165,9 +162,7 @@ impl ContributionGraph {
     /// Add or update an edge between two nodes.
     fn ensure_edge(&mut self, from: &str, to: &str) -> &mut Edge {
         let key = edge_key(from, to);
-        self.edges
-            .entry(key)
-            .or_insert_with(|| Edge::new(from, to))
+        self.edges.entry(key).or_insert_with(|| Edge::new(from, to))
     }
 }
 
@@ -320,9 +315,7 @@ mod tests {
 
     #[test]
     fn test_outgoing_incoming_edges() {
-        let records = vec![
-            make_tx("ALICE", &["BOB", "CAROL"], 100),
-        ];
+        let records = vec![make_tx("ALICE", &["BOB", "CAROL"], 100)];
         let graph = GraphBuilder::new().build(&records).unwrap();
 
         let outgoing = graph.outgoing_edges("ALICE");

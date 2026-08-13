@@ -58,7 +58,10 @@ pub async fn run(config: IngestConfig) -> Result<IngestResult> {
 
     // Warn if range is very large
     if let Err(e) = range.check_size() {
-        tracing::warn!("{} — consider using --start-ledger/--end-ledger to narrow the window", e);
+        tracing::warn!(
+            "{} — consider using --start-ledger/--end-ledger to narrow the window",
+            e
+        );
     }
 
     let transactions = client
@@ -78,7 +81,10 @@ pub async fn run(config: IngestConfig) -> Result<IngestResult> {
     // Step 2: Convert to TxRecords for the graph builder
     let records = build_tx_records(&transactions);
     let participant_count = count_unique_participants(&records);
-    debug!(participants = participant_count, "Unique participants found");
+    debug!(
+        participants = participant_count,
+        "Unique participants found"
+    );
 
     // Step 3: Build contribution graph
     let graph = GraphBuilder::new()

@@ -266,7 +266,10 @@ mod tests {
     #[test]
     fn test_operation_type_from_str() {
         assert_eq!(OperationType::from("payment"), OperationType::Payment);
-        assert_eq!(OperationType::from("create_account"), OperationType::CreateAccount);
+        assert_eq!(
+            OperationType::from("create_account"),
+            OperationType::CreateAccount
+        );
         assert_eq!(OperationType::from("unknown_op"), OperationType::Unknown);
     }
 

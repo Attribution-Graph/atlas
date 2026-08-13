@@ -112,8 +112,10 @@ pub fn compute_pagerank(
 
     // Initialize ranks uniformly
     let initial_rank = 1.0 / n as f64;
-    let mut ranks: HashMap<String, f64> =
-        node_ids.iter().map(|id| (id.clone(), initial_rank)).collect();
+    let mut ranks: HashMap<String, f64> = node_ids
+        .iter()
+        .map(|id| (id.clone(), initial_rank))
+        .collect();
 
     // Precompute total outgoing weight for each node
     let out_weights: HashMap<String, f64> = node_ids
@@ -229,10 +231,7 @@ mod tests {
     fn test_pagerank_basic() {
         // Classic PageRank example: A→B, A→C, B→C
         // C should have the highest rank
-        let records = vec![
-            make_tx("A", &["B", "C"]),
-            make_tx("B", &["C"]),
-        ];
+        let records = vec![make_tx("A", &["B", "C"]), make_tx("B", &["C"])];
 
         let graph = GraphBuilder::new().build(&records).unwrap();
         let config = RankConfig::default();
@@ -258,10 +257,7 @@ mod tests {
 
     #[test]
     fn test_scores_normalized() {
-        let records = vec![
-            make_tx("A", &["B", "C"]),
-            make_tx("B", &["C"]),
-        ];
+        let records = vec![make_tx("A", &["B", "C"]), make_tx("B", &["C"])];
         let graph = GraphBuilder::new().build(&records).unwrap();
         let result = compute_pagerank(&graph, &RankConfig::default()).unwrap();
 
@@ -294,10 +290,7 @@ mod tests {
 
     #[test]
     fn test_rank_positions_assigned() {
-        let records = vec![
-            make_tx("A", &["B"]),
-            make_tx("B", &["C"]),
-        ];
+        let records = vec![make_tx("A", &["B"]), make_tx("B", &["C"])];
         let graph = GraphBuilder::new().build(&records).unwrap();
         let result = compute_pagerank(&graph, &RankConfig::default()).unwrap();
 

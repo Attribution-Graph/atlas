@@ -91,8 +91,7 @@ impl HorizonClient {
     ) -> Result<Vec<Transaction>> {
         info!(
             start_ledger,
-            end_ledger,
-            "Fetching transactions in ledger range"
+            end_ledger, "Fetching transactions in ledger range"
         );
 
         let mut all_transactions = Vec::new();
@@ -179,10 +178,7 @@ impl HorizonClient {
     }
 
     /// Fetch operations for a specific transaction by hash.
-    pub async fn fetch_operations_for_transaction(
-        &self,
-        tx_hash: &str,
-    ) -> Result<Vec<Operation>> {
+    pub async fn fetch_operations_for_transaction(&self, tx_hash: &str) -> Result<Vec<Operation>> {
         let url = format!(
             "{}/transactions/{}/operations?limit={}",
             self.config.base_url, tx_hash, self.config.page_limit

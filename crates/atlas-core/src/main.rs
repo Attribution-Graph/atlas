@@ -176,7 +176,10 @@ async fn run_ingest(args: IngestArgs) -> Result<()> {
 fn print_table(result: &orchestrator::IngestResult, top_n: usize) {
     println!(
         "\n{:=<60}",
-        format!(" Atlas Rankings (ledgers {}-{}) ", result.start_ledger, result.end_ledger)
+        format!(
+            " Atlas Rankings (ledgers {}-{}) ",
+            result.start_ledger, result.end_ledger
+        )
     );
     println!("{:<6} {:<56} {:>10}", "Rank", "Account ID", "Score");
     println!("{:-<75}", "");
@@ -187,7 +190,12 @@ fn print_table(result: &orchestrator::IngestResult, top_n: usize) {
         } else {
             entry.account_id.clone()
         };
-        println!("{:<6} {:<56} {:>10.6}", entry.rank + 1, display, entry.score);
+        println!(
+            "{:<6} {:<56} {:>10.6}",
+            entry.rank + 1,
+            display,
+            entry.score
+        );
     }
 
     println!("{:-<75}", "");
@@ -213,5 +221,3 @@ fn print_csv(result: &orchestrator::IngestResult) {
         );
     }
 }
-
-
