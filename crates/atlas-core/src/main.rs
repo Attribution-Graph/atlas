@@ -23,6 +23,7 @@ use tracing::{info, warn};
 
 mod db;
 mod orchestrator;
+mod telemetry;
 
 use orchestrator::IngestConfig;
 
@@ -104,12 +105,7 @@ async fn main() -> Result<()> {
     let cli = Cli::parse();
 
     // Initialize structured logging
-    let log_level = match cli.verbose {
-        0 => "info",
-        1 => "debug",
-        _ => "trace",
-    };
-    init_tracing(log_level);
+    telemetry::init(cli.verbose);
 
     info!(version = env!("CARGO_PKG_VERSION"), "Atlas starting");
 
@@ -218,14 +214,4 @@ fn print_csv(result: &orchestrator::IngestResult) {
     }
 }
 
-fn init_tracing(default_level: &str) {
-    use tracing_subscriber::{fmt, prelude::*, EnvFilter};
 
-    let env_filter = EnvFilter::try_from_default_env()
-        .unwrap_or_else(|_| EnvFilter::new(default_level));
-
-    tracing_subscriber::registry()
-        .with(fmt::layer().with_target(true))
-        .with(env_filter)
-        .init();
-}
